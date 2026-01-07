@@ -27,8 +27,10 @@ module UmgundiHoldings
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w(assets tasks))
 
-    # RSpec configuration 
+    # Generators configuration (RSpec + UUIDs) 
     config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
+
       g.test_framework :rspec,
                        fixtures: false,
                        view_specs: false,
