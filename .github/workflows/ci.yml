@@ -13,8 +13,6 @@ jobs:
     services:
       postgres:
         image: postgres:14
-        ports:
-          - 5432:5432
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: umgundi
@@ -49,6 +47,9 @@ jobs:
 
       - name: Install gems
         run: bundle install
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
       - name: Wait for Postgres
         run: |
