@@ -15,6 +15,8 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: umgundi
+        ports:
+          - 5432:5432
 
     strategy:
       matrix:
@@ -23,6 +25,7 @@ jobs:
     env:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: umgundi
+      PGHOST: postgres
 
     steps:
       - name: Checkout code
@@ -38,6 +41,13 @@ jobs:
 
       - name: Install gems
         run: bundle install
+
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h $PGHOST -U $POSTGRES_USER; do
+            echo "Waiting for Postgres..."
+            sleep 1
+          done
 
       - name: Setup DB
         run: bin/rails db:create db:migrate RAILS_ENV=test
