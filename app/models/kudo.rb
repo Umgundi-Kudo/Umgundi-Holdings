@@ -1,2 +1,2 @@
-# class Kudo < ApplicationRecord
-# end
+class Kudo < ApplicationRecord
+end
