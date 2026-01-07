@@ -42,9 +42,9 @@ jobs:
       - name: Install gems
         run: bundle install
 
-      - name: Wait for Postgres
+      - name: Wait for Postgres to be ready
         run: |
-          until pg_isready -h $PGHOST -U $POSTGRES_USER; do
+          until pg_isready -h ${{ env.PGHOST }} -U ${{ env.POSTGRES_USER }}; do
             echo "Waiting for Postgres..."
             sleep 1
           done
