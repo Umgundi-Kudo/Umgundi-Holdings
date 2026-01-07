@@ -10,16 +10,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-
     services:
       postgres:
         image: postgres:14
+        ports:
+          - 5432:5432
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: umgundi
           POSTGRES_DB: umgundi_test
         options: >-
-          --health-cmd "pg_isready -U postgres"
+          --health-cmd "pg_isready -U postgres -d umgundi_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 20
@@ -32,6 +33,7 @@ jobs:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: umgundi
       PGHOST: postgres
+      RAILS_ENV: test
 
     steps:
       - name: Checkout code
@@ -48,17 +50,19 @@ jobs:
       - name: Install gems
         run: bundle install
 
-      - name: Wait for Postgres to be ready
+      - name: Wait for Postgres
         run: |
           echo "Waiting for Postgres to be ready..."
+          export PGPASSWORD=$POSTGRES_PASSWORD
           until pg_isready -h $PGHOST -U $POSTGRES_USER; do
+            echo "Waiting for Postgres..."
             sleep 1
           done
-          echo "Postgres is ready!"
 
-      - name: Setup DB
-        run: bin/rails db:create db:migrate RAILS_ENV=test
+      - name: Setup Database
+        run: |
+          bin/rails db:create
+          bin/rails db:migrate
 
       - name: Run tests
         run: bundle exec rspec
-
