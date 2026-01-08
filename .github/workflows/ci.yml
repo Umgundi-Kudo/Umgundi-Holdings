@@ -36,11 +36,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🔧 REQUIRED for pg gem (fixes Bundler exit code 16)
+      #Needed for pg gem
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libpq-dev
+
+      #Fix Bundler frozen/deployment mode
+      - name: Disable bundler frozen mode
+        run: bundle config set --local deployment false
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
