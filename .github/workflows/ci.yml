@@ -32,19 +32,19 @@ jobs:
       PGHOST: localhost
       RAILS_ENV: test
 
+      # THIS fixes the dotenv-rails / frozen lockfile issue
+      BUNDLE_DEPLOYMENT: "false"
+      BUNDLE_FROZEN: "false"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      #Needed for pg gem
+      # Required for pg gem
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libpq-dev
-
-      #Fix Bundler frozen/deployment mode
-      - name: Disable bundler frozen mode
-        run: bundle config set --local deployment false
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -64,8 +64,7 @@ jobs:
           done
 
       - name: Setup Database
-        run: |
-          bin/rails db:prepare
+        run: bin/rails db:prepare
 
       - name: Run tests
         run: bundle exec rspec
