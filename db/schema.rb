@@ -10,25 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_09_090350) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_09_111944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "kudos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "sender", null: false
-    t.string "receiver", null: false
     t.text "message", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "sender_id", null: false
-    t.uuid "receiver_id", null: false
     t.string "category", null: false
+    t.uuid "sender_id"
+    t.uuid "receiver_id"
     t.index ["receiver_id"], name: "index_kudos_on_receiver_id"
     t.index ["sender_id"], name: "index_kudos_on_sender_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "username"
     t.string "email"
     t.string "password_digest"
@@ -37,4 +35,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_09_090350) do
     t.boolean "email_verified", default: false, null: false
   end
 
+  add_foreign_key "kudos", "users", column: "receiver_id"
+  add_foreign_key "kudos", "users", column: "sender_id"
 end

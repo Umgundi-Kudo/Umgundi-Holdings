@@ -8,6 +8,8 @@ gem "rails", "~> 7.1.6"
 # Postgres
 gem"pg"
 
+gem 'pry'
+gem 'pry-byebug'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 

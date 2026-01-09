@@ -19,7 +19,6 @@ RSpec.describe Kudo, type: :model do
         )
     end
 
-
     it 'creates a valid kudo' do
         kudo = Kudo.new(
             sender: sender,
@@ -81,6 +80,7 @@ RSpec.describe Kudo, type: :model do
             password_confirmation: "password123"
         )
 
+        
         receiver = User.create!(
             username: "receiver",
             email: "receiver@example.com",
