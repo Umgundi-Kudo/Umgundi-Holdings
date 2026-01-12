@@ -10,25 +10,22 @@ module Users
 
     def call
       user = User.new(@params)
-
-      return failure("Invalid user details") unless user.valid?
-
+      user.email_verified = false
       user.email_verification_token = SecureRandom.hex(20)
       user.email_verification_sent_at = Time.current
 
-      user.save!
-
-      UserMailer.email_verification(user).deliver_later
-
-      success(user)
-    rescue ActiveRecord::RecordInvalid => e
-      failure(e.message)
+      if user.save
+        UserMailer.verify_email(user).deliver_now
+        success
+      else
+        failure(user.errors.full_messages.first)
+      end
     end
 
     private
 
-    def success(user)
-      OpenStruct.new(success?: true, user: user)
+    def success
+      OpenStruct.new(success?: true)
     end
 
     def failure(message)

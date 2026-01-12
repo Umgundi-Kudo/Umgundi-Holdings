@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_09_111944) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_12_062957) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -26,6 +26,12 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_09_111944) do
     t.index ["sender_id"], name: "index_kudos_on_sender_id"
   end
 
+  create_table "test_models", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "username"
     t.string "email"
@@ -33,6 +39,10 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_09_111944) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "email_verified", default: false, null: false
+    t.string "email_verification_token"
+    t.datetime "email_verification_sent_at"
+    t.index ["email"], name: "index_users_on_email"
+    t.index ["email_verification_token"], name: "index_users_on_email_verification_token", unique: true
   end
 
   add_foreign_key "kudos", "users", column: "receiver_id"
