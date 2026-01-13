@@ -63,6 +63,14 @@ group :development do
 end
 
 group :development, :test do
+  gem "factory_bot_rails"
+end 
+
+group :development, :test do
+  gem "faker"
+end 
+
+group :development, :test do
   gem "rspec-rails"
 end 
 group :development, :test do
