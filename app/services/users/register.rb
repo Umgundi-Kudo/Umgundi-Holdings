@@ -17,12 +17,11 @@ module Users
 
       if user.save
         UserMailer.verify_email(user).deliver_later
-
         success(user)
       else
         failure(user.errors.full_messages.first)
       end
-    rescue => e
+    rescue StandardError => e
       Rails.logger.error("USER REGISTER ERROR: #{e.message}")
       failure("Something went wrong. Please try again.")
     end

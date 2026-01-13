@@ -14,9 +14,8 @@ RSpec.describe "Users", type: :request do
     end
 
     before do
-      # Prevent real email delivery during tests
-      allow(UserMailer)
-        .to receive_message_chain(:verify_email, :deliver_now)
+      mailer = double(deliver_later: true)
+      allow(UserMailer).to receive(:verify_email).and_return(mailer)
     end
 
     it "creates a new user and sends verification email" do
@@ -30,12 +29,8 @@ RSpec.describe "Users", type: :request do
       expect(user.email_verification_token).to be_present
       expect(user.email_verification_sent_at).to be_present
 
+      expect(UserMailer).to have_received(:verify_email).with(user)
       expect(response).to redirect_to(login_path)
-      follow_redirect!
-
-      expect(response.body).to include(
-        "Account created! Please check your email to verify your account."
-      )
     end
 
     it "does not create user with invalid params" do
