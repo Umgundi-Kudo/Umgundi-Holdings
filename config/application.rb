@@ -22,12 +22,9 @@ module UmgundiHoldings
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 
-    # Configure autoloading for lib/, ignoring non-Ruby directories
     config.autoload_lib(ignore: %w[assets tasks])
 
-    
-    # - Use UUIDs as primary keys by default
-    # - Use RSpec for testing
+    # Generators
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
 
