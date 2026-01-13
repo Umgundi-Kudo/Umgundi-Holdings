@@ -26,13 +26,16 @@ jobs:
           --health-retries 5
 
     env:
+      RAILS_ENV: test
+      PGHOST: localhost
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: umgundi
       POSTGRES_DB: umgundi_test
-      PGHOST: localhost
-      RAILS_ENV: test
 
-      # THIS fixes the dotenv-rails / frozen lockfile issue
+      # Rails prefers DATABASE_URL in CI
+      DATABASE_URL: postgres://postgres:umgundi@localhost:5432/umgundi_test
+
+      # Fix bundler / dotenv issues in CI
       BUNDLE_DEPLOYMENT: "false"
       BUNDLE_FROZEN: "false"
 
@@ -40,20 +43,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Required for pg gem
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libpq-dev
+          sudo apt-get install -y libpq-dev postgresql-client
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.0
+          ruby-version: 3.2.2
           bundler-cache: true
-
-      - name: Install PostgreSQL client
-        run: sudo apt-get install -y postgresql-client
 
       - name: Wait for Postgres
         run: |
@@ -62,6 +61,11 @@ jobs:
             echo "Waiting for Postgres..."
             sleep 1
           done
+
+      
+      - name: Enable pgcrypto extension
+        run: |
+          psql "$DATABASE_URL" -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
 
       - name: Setup Database
         run: bin/rails db:prepare
