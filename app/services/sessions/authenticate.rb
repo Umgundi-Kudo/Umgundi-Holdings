@@ -1,31 +1,21 @@
 module Sessions
   class Authenticate
-    def self.call(email:, password:)
-      new(email, password).call
+    def self.call(username:, password:)
+      new(username, password).call
     end
 
-    def initialize(email, password)
-      @email = email
+    def initialize(username, password)
+      @username = username
       @password = password
     end
 
     def call
-      user = User.find_by(email: @email)
+      user = User.find_by(username: @username)
+      return nil unless user
+      return nil unless user.authenticate(@password)
+      return nil unless user.email_verified?
 
-      return failure("Invalid email or password") unless user&.authenticate(@password)
-      return failure("Please verify your email before logging in") unless user.email_verified
-
-      success(user)
-    end
-
-    private
-
-    def success(user)
-      OpenStruct.new(success?: true, user: user)
-    end
-
-    def failure(message)
-      OpenStruct.new(success?: false, error: message)
+      user
     end
   end
 end
