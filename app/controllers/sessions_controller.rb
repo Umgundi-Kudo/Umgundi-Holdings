@@ -5,6 +5,7 @@ class SessionsController < ApplicationController
 
   def create
     user = Sessions::Authenticate.call(
+      email: params[:email],
       username: params[:username],
       password: params[:password]
     )
@@ -13,7 +14,7 @@ class SessionsController < ApplicationController
       session[:user_id] = user.id
       redirect_to dashboard_path
     else
-      flash.now[:alert] = "Invalid username or password"
+      flash.now[:alert] = "Invalid email or password"
       render :new, status: :unprocessable_entity
     end
   end
