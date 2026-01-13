@@ -12,10 +12,13 @@ module Users
       user = User.find_by(email_verification_token: @token)
       return failure("Invalid or expired verification link.") unless user
 
-      user.update!(
+      
+      # update_columns skips validations (including password validations)
+      user.update_columns(
         email_verified: true,
         email_verification_token: nil,
-        email_verification_sent_at: nil
+        email_verification_sent_at: nil,
+        updated_at: Time.current
       )
 
       success
