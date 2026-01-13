@@ -75,6 +75,18 @@ RSpec.describe Kudo, type: :model do
     expect(kudo).not_to be_valid
   end
 
+  it 'does not allow a user to give themselves a kudo' do
+    kudo = Kudo.new(
+      sender: sender,
+      receiver: sender,
+      category: 'Teamwork',
+      message: 'I am amazing'
+    )
+
+    expect(kudo).not_to be_valid
+    expect(kudo.errors[:receiver]).to include("can't be the same as sender")
+  end
+
   it 'is invalid if message is too long' do
     kudo = Kudo.new(
       sender: sender,
