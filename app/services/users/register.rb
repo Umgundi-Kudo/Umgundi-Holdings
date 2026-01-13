@@ -15,20 +15,26 @@ module Users
       user.email_verification_token = SecureRandom.hex(20)
       user.email_verification_sent_at = Time.current
 
-      ActiveRecord::Base.transaction do
-        user.save!
+      if user.save
+        UserMailer.verify_email(user).deliver_later
 
-        UserMailer.verify_email(user).deliver_now
+        success(user)
+      else
+        failure(user.errors.full_messages.first)
       end
-
-      OpenStruct.new(success?: true, user: user)
-
-    rescue ActiveRecord::RecordInvalid => e
-      OpenStruct.new(success?: false, error: e.record.errors.full_messages.first)
-
-    rescue StandardError => e
+    rescue => e
       Rails.logger.error("USER REGISTER ERROR: #{e.message}")
-      OpenStruct.new(success?: false, error: "Something went wrong. Please try again.")
+      failure("Something went wrong. Please try again.")
+    end
+
+    private
+
+    def success(user)
+      OpenStruct.new(success?: true, user: user)
+    end
+
+    def failure(message)
+      OpenStruct.new(success?: false, error: message)
     end
   end
 end
