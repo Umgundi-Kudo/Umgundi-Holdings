@@ -19,24 +19,15 @@ jobs:
           POSTGRES_DB: umgundi_test
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     env:
       RAILS_ENV: test
-
       DATABASE_URL: postgres://postgres:umgundi@postgres:5432/umgundi_test
-
-      # Bundler fixes
       BUNDLE_DEPLOYMENT: "false"
       BUNDLE_FROZEN: "false"
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Install system dependencies
         run: |
@@ -48,13 +39,6 @@ jobs:
         with:
           ruby-version: 3.2.2
           bundler-cache: true
-
-      - name: Wait for Postgres
-        run: |
-          until pg_isready -h postgres -U postgres; do
-            echo "Waiting for Postgres..."
-            sleep 1
-          done
 
       - name: Setup Database
         run: bin/rails db:prepare
