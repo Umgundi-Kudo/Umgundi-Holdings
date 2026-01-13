@@ -27,15 +27,10 @@ jobs:
 
     env:
       RAILS_ENV: test
-      PGHOST: localhost
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: umgundi
-      POSTGRES_DB: umgundi_test
 
-      # Rails prefers DATABASE_URL in CI
-      DATABASE_URL: postgres://postgres:umgundi@localhost:5432/umgundi_test
+      DATABASE_URL: postgres://postgres:umgundi@postgres:5432/umgundi_test
 
-      # Fix bundler / dotenv issues in CI
+      # Bundler fixes
       BUNDLE_DEPLOYMENT: "false"
       BUNDLE_FROZEN: "false"
 
@@ -56,16 +51,10 @@ jobs:
 
       - name: Wait for Postgres
         run: |
-          export PGPASSWORD=$POSTGRES_PASSWORD
-          until pg_isready -h $PGHOST -U $POSTGRES_USER; do
+          until pg_isready -h postgres -U postgres; do
             echo "Waiting for Postgres..."
             sleep 1
           done
-
-      
-      - name: Enable pgcrypto extension
-        run: |
-          psql "$DATABASE_URL" -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
 
       - name: Setup Database
         run: bin/rails db:prepare
