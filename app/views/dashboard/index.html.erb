@@ -1,5 +1,9 @@
 <h1>Kudos Feed 🎉</h1>
 
+<p>
+  <%= link_to "➕ Send a Kudo", new_kudo_path, class: "send-kudo-link" %>
+</p>
+
 <% if @kudos.any? %>
   <ul>
     <% @kudos.each do |kudo| %>
@@ -11,7 +15,9 @@
 
         <p><%= kudo.message %></p>
 
-        <small><%= kudo.created_at.strftime("%d %b %Y %H:%M") %></small>
+        <small>
+          <%= kudo.created_at.strftime("%d %b %Y %H:%M") %>
+        </small>
       </li>
       <hr>
     <% end %>
