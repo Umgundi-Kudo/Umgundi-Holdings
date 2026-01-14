@@ -6,8 +6,7 @@ class Kudo < ApplicationRecord
 
   validates :message, presence: true, length: { maximum: 500 }
   validates :category, inclusion: { in: CATEGORIES }
-
-  validate :different_sender_and_receiver
+  validate  :different_sender_and_receiver
 
   scope :sent_by,     ->(user) { where(sender: user) }
   scope :received_by, ->(user) { where(receiver: user) }
@@ -15,8 +14,6 @@ class Kudo < ApplicationRecord
   private
 
   def different_sender_and_receiver
-    return if sender_id != receiver_id
-
-    errors.add(:receiver, "can't be the same as sender")
+    errors.add(:receiver, "can't be the same as sender") if sender_id == receiver_id
   end
 end
