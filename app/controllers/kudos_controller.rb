@@ -7,12 +7,16 @@ class KudosController < ApplicationController
   end
 
   def create
-    @kudo = Kudo.new(kudo_params)
-    @kudo.sender = current_user
+    result = Kudos::Create.call(
+      sender: current_user,
+      params: kudo_params
+    )
 
-    if @kudo.save
+    if result.success?
       redirect_to dashboard_path, notice: "Kudo sent 🎉"
     else
+      @kudo = result.kudo
+      @users = User.where.not(id: current_user.id)
       render :new, status: :unprocessable_entity
     end
   end
