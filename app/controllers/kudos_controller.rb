@@ -7,11 +7,7 @@ class KudosController < ApplicationController
   end
 
   def create
-    result = Kudos::Create.call(
-      sender: current_user,
-      params: kudo_params
-    )
-
+    result = Kudos::Create.call(sender: current_user, params: kudo_params)
     if result.success?
       redirect_to dashboard_path, notice: "Kudo sent 🎉"
     else
