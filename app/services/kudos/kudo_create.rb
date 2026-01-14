@@ -1,5 +1,5 @@
 module Kudos
-    class Create
+    class KudoCreate
         def self.call(sender:, params:)
             new(sender, params).call
         end
