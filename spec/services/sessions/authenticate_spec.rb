@@ -23,46 +23,52 @@ RSpec.describe Sessions::Authenticate do
     end
 
     context "when credentials are valid and email is verified" do
-      it "returns the user" do
+      it "returns a successful result with the user" do
         result = described_class.call(
-          username: "konke",
+          email: verified_user.email,
           password: "password123"
         )
 
-        expect(result).to eq(verified_user)
+        expect(result.success?).to be(true)
+        expect(result.user).to eq(verified_user)
       end
     end
 
     context "when password is invalid" do
-      it "returns nil" do
+      it "returns a failure result with an error message" do
         result = described_class.call(
-          username: "konke",
+          email: verified_user.email,
           password: "wrong-password"
         )
 
-        expect(result).to be_nil
+        expect(result.success?).to be(false)
+        expect(result.error).to eq("Invalid email or password")
       end
     end
 
-    context "when username does not exist" do
-      it "returns nil" do
+    context "when email does not exist" do
+      it "returns a failure result with an error message" do
         result = described_class.call(
-          username: "unknown-user",
+          email: "unknown@example.com",
           password: "password123"
         )
 
-        expect(result).to be_nil
+        expect(result.success?).to be(false)
+        expect(result.error).to eq("Invalid email or password")
       end
     end
 
     context "when email is not verified" do
-      it "returns nil even if password is correct" do
+      it "returns a failure result with a verification error" do
         result = described_class.call(
-          username: "unverified",
+          email: unverified_user.email,
           password: "password123"
         )
 
-        expect(result).to be_nil
+        expect(result.success?).to be(false)
+        expect(result.error).to eq(
+          "Please verify your email before logging in"
+        )
       end
     end
   end
