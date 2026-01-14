@@ -1,6 +1,6 @@
 <h1>Send a Kudo 🎉</h1>
 
-<%= form_with model: @kudo, local: true do |f| %>
+<%= form_with model: @kudo, url: kudos_path, local: true do |f| %>
 
   <!-- Receiver -->
   <div>
@@ -9,7 +9,7 @@
           @users,
           :id,
           :username,
-          prompt: "Choose a user" %>
+          { prompt: "Choose a user" } %>
   </div>
 
   <!-- Category -->
@@ -17,13 +17,15 @@
     <%= f.label :category %><br>
     <%= f.select :category,
           Kudo::CATEGORIES,
-          prompt: "Choose a category" %>
+          { prompt: "Choose a category" } %>
   </div>
 
   <!-- Message -->
   <div>
     <%= f.label :message %><br>
-    <%= f.text_area :message, rows: 4 %>
+    <%= f.text_area :message,
+          rows: 4,
+          placeholder: "Write your message here (max 500 characters)" %>
   </div>
 
   <!-- Submit -->
