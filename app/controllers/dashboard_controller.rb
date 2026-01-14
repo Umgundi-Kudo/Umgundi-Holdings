@@ -4,6 +4,6 @@ class DashboardController < ApplicationController
   def index
     @kudos = Kudo
     .includes(:sender, :receiver)
-    .oorder(created_at: :desc)
+    .order(created_at: :desc)
   end 
 end
