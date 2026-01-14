@@ -1,1 +1,21 @@
-<h1>Coming Soon 🚧</h1>
+<h1>Kudos Feed 🎉</h1>
+
+<% if @kudos.any? %>
+  <ul>
+    <% @kudos.each do |kudo| %>
+      <li>
+        <strong><%= kudo.sender.username %></strong>
+        → <strong><%= kudo.receiver.username %></strong><br>
+
+        <em><%= kudo.category %></em><br>
+
+        <p><%= kudo.message %></p>
+
+        <small><%= kudo.created_at.strftime("%d %b %Y %H:%M") %></small>
+      </li>
+      <hr>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No kudos yet.</p>
+<% end %>
