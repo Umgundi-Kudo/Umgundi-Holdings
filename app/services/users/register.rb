@@ -21,7 +21,8 @@ module Users
       else
         failure(user.errors.full_messages.first)
       end
-    rescue StandardError => e
+      #error handling
+    rescue StandardError => e 
       Rails.logger.error("USER REGISTER ERROR: #{e.message}")
       failure("Something went wrong. Please try again.")
     end
