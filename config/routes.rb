@@ -20,6 +20,9 @@ Rails.application.routes.draw do
   # Dashboard (after login)
   get "/dashboard", to: "dashboard#index", as: :dashboard
 
+  # Leaderboard
+  get "/leaderboard", to: "leaderboard#index", as: :leaderboard
+
   # Kudos
   resources :kudos, only: [:new, :create]
 end
