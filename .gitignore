@@ -33,6 +33,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-
+#ignore coverage files
+/coverage
 #Ignore database.yml
 config/database.yml
