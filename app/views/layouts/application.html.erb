@@ -11,6 +11,17 @@
   </head>
 
   <body>
+    <% if current_user %>
+      <%= render "shared/navbar" %>
+    <% end %>
+
+    <!-- Flash messages -->
+    <% flash.each do |type, message| %>
+      <div class="flash <%= type %>">
+        <%= message %>
+      </div>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
