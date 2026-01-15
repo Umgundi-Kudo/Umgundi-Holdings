@@ -1,33 +1,25 @@
-module Kudos
-  class KudoCreate
-    def self.call(sender:, params:)
-      new(sender: sender, params: params).call
+class KudosController < ApplicationController
+  before_action :require_login
+
+  def new
+    @kudo = Kudo.new
+    @users = User.where.not(id: current_user.id)
+  end
+
+  def create
+    result = Kudos::KudoCreate.call(sender: current_user, params: kudo_params)
+    if result.success?
+      redirect_to dashboard_path, notice: "Kudo sent 🎉"
+    else
+      @kudo = result.kudo
+      @users = User.where.not(id: current_user.id)
+      render :new, status: :unprocessable_entity
     end
+  end
 
-    def initialize(sender:, params:)
-      @sender = sender
-      @params = params
-    end
+  private
 
-    def call
-      kudo = Kudo.new(@params)
-      kudo.sender = @sender
-
-      if kudo.save
-        success(kudo)
-      else
-        failure(kudo)
-      end
-    end
-
-    private
-
-    def success(kudo)
-      OpenStruct.new(success?: true, kudo: kudo)
-    end
-
-    def failure(kudo)
-      OpenStruct.new(success?: false, kudo: kudo)
-    end
+  def kudo_params
+    params.require(:kudo).permit(:receiver_id, :category, :message)
   end
 end
