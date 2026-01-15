@@ -1,0 +1,67 @@
+/* Navbar container */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: #111827; /* dark navy */
+  color: white;
+}
+
+/* App title */
+.navbar-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Profile dropdown */
+.profile-menu {
+  position: relative;
+}
+
+.profile-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Dropdown menu */
+.dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: white;
+  color: #111827;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  min-width: 160px;
+  z-index: 100;
+}
+
+/* Show dropdown on hover */
+.profile-menu:hover .dropdown {
+  display: block;
+}
+
+/* Dropdown links */
+.dropdown a,
+.dropdown form button {
+  display: block;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: #111827;
+  font-size: 14px;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown a:hover,
+.dropdown form button:hover {
+  background-color: #f3f4f6;
+}
