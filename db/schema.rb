@@ -45,10 +45,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_12_105227) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "email_verified", default: false, null: false
-    t.string "email_verification_token"
-    t.datetime "email_verification_sent_at"
-    t.index ["email"], name: "index_users_on_email"
-    t.index ["email_verification_token"], name: "index_users_on_email_verification_token", unique: true
   end
 
   add_foreign_key "kudos", "users", column: "receiver_id"

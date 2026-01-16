@@ -25,3 +25,23 @@
 <% else %>
   <p>No kudos yet.</p>
 <% end %>
+
+<h2>🏆 Top 3 Kudos Leaders</h2>
+<ul>
+  <% User.joins(:received_kudos)
+         .group("users.id")
+         .order("COUNT(kudos.id) DESC")
+         .limit(3)
+         .each do |user| %>
+    <li style="<%= 'font-weight: bold; color: green;' if user == current_user %>">
+      <%= user.username %> (<%= user.received_kudos.count %> kudos)
+      <% if user == current_user %>
+        ← You!
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<p>
+  <%= link_to "View Full Leaderboard", leaderboard_path, class: "btn btn-link" %>
+</p>
