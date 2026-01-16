@@ -13,6 +13,8 @@ class KudosController < ApplicationController
     if @kudo.save
       redirect_to dashboard_path, notice: "Kudo sent 🎉"
     else
+      flash.now[:alert] = "Please fix the errors below"
+      @users = User.where.not(id: current_user.id)
       render :new, status: :unprocessable_entity
     end
   end

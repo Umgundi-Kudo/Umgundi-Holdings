@@ -26,6 +26,8 @@
   <p>No kudos yet.</p>
 <% end %>
 
+<hr>
+
 <h2>🏆 Top 3 Kudos Leaders</h2>
 <ul>
   <% User.joins(:received_kudos)
@@ -43,5 +45,30 @@
 </ul>
 
 <p>
-  <%= link_to "View Full Leaderboard", leaderboard_path, class: "btn btn-link" %>
+  <%= link_to "View Full Leaderboard", leaderboard_path %>
 </p>
+
+<hr>
+
+<h2>My Kudos 💌</h2>
+
+<% if @received_kudos.any? %>
+  <ul>
+    <% @received_kudos.each do |kudo| %>
+      <li>
+        <strong>From:</strong> <%= kudo.sender.username %><br>
+
+        <em><%= kudo.category %></em>
+
+        <p><%= kudo.message %></p>
+
+        <small>
+          <%= kudo.created_at.strftime("%d %b %Y %H:%M") %>
+        </small>
+      </li>
+      <hr>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You haven’t received any kudos yet 🌱</p>
+<% end %>

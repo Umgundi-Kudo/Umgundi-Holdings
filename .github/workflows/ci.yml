@@ -2,9 +2,12 @@ name: Rails CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - week-2-ui
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   test:
@@ -30,7 +33,6 @@ jobs:
       DATABASE_URL: postgres://postgres:umgundi@localhost:5432/umgundi_test
 
       DISABLE_BOOTSNAP: "true"
-
       BUNDLE_DEPLOYMENT: "false"
       BUNDLE_FROZEN: "false"
 

@@ -1,5 +1,16 @@
 <h1>Send a Kudo 🎉</h1>
 
+<% if @kudo.errors.any? %>
+  <div class="form-errors">
+    <h3><%= pluralize(@kudo.errors.count, "error") %> prevented this kudo from being sent:</h3>
+    <ul>
+      <% @kudo.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <%= form_with model: @kudo, local: true do |f| %>
 
   <!-- Receiver -->
