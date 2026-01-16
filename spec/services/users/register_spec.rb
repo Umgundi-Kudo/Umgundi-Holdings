@@ -15,7 +15,7 @@ RSpec.describe Users::Register do
       mailer = double(deliver_later: true)
       allow(UserMailer).to receive(:verify_email).and_return(mailer)
 
-      result = described_class.call(params)
+      result = described_class.call(**params)
 
       expect(result.success?).to be true
 
@@ -29,7 +29,7 @@ RSpec.describe Users::Register do
     end
 
     it "fails when params are invalid" do
-      result = described_class.call(params.merge(email: ""))
+      result = described_class.call(**params.merge(email: ""))
 
       expect(result.success?).to be false
       expect(result.error).to be_present
