@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - week-2-ui
+      - week-3-likes-turbo
   pull_request:
     branches:
       - main
