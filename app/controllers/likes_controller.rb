@@ -1,9 +1,9 @@
 class LikesController < ApplicationController
   before_action :require_login
+  before_action :set_kudo
 
   def create
-    @kudo = Kudo.find(params[:kudo_id])
-    @like = @kudo.likes.create(user: current_user)
+    @like = @kudo.likes.find_or_create_by(user: current_user)
 
     respond_to do |format|
       format.turbo_stream
@@ -12,7 +12,6 @@ class LikesController < ApplicationController
   end
 
   def destroy
-    @kudo = Kudo.find(params[:kudo_id])
     @like = @kudo.likes.find_by(user: current_user)
     @like&.destroy
 
@@ -20,5 +19,11 @@ class LikesController < ApplicationController
       format.turbo_stream
       format.html { redirect_to dashboard_path }
     end
+  end
+
+  private
+
+  def set_kudo
+    @kudo = Kudo.find(params[:kudo_id])
   end
 end

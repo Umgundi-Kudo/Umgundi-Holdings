@@ -23,9 +23,8 @@ Rails.application.routes.draw do
   # Leaderboard
   get "/leaderboard", to: "leaderboard#index", as: :leaderboard
 
-  # Kudos
+  # Kudos + Likes
   resources :kudos, only: [:new, :create] do
-    # Likes (Turbo-friendly: create & destroy)
     resource :like, only: [:create, :destroy]
   end
 end
