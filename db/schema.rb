@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_12_105227) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_19_102531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -24,6 +24,15 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_12_105227) do
     t.uuid "receiver_id"
     t.index ["receiver_id"], name: "index_kudos_on_receiver_id"
     t.index ["sender_id"], name: "index_kudos_on_sender_id"
+  end
+
+  create_table "likes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "kudo_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["kudo_id"], name: "index_likes_on_kudo_id"
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "test_models", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -45,12 +54,10 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_12_105227) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "email_verified", default: false, null: false
-    t.string "email_verification_token"
-    t.datetime "email_verification_sent_at"
-    t.index ["email"], name: "index_users_on_email"
-    t.index ["email_verification_token"], name: "index_users_on_email_verification_token", unique: true
   end
 
   add_foreign_key "kudos", "users", column: "receiver_id"
   add_foreign_key "kudos", "users", column: "sender_id"
+  add_foreign_key "likes", "kudos"
+  add_foreign_key "likes", "users"
 end
