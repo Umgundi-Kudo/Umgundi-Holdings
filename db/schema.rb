@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_19_102531) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_19_110529) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_19_102531) do
     t.text "message", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "category", null: false
+    t.string "category", default: "general", null: false
     t.uuid "sender_id"
     t.uuid "receiver_id"
     t.index ["receiver_id"], name: "index_kudos_on_receiver_id"
@@ -54,6 +54,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_19_102531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "email_verified", default: false, null: false
+    t.string "email_verification_token"
+    t.datetime "email_verification_sent_at"
+    t.index ["email_verification_token"], name: "index_users_on_email_verification_token", unique: true
   end
 
   add_foreign_key "kudos", "users", column: "receiver_id"
