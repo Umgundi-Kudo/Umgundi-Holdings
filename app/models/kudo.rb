@@ -1,6 +1,8 @@
 class Kudo < ApplicationRecord
   belongs_to :sender, class_name: 'User'
   belongs_to :receiver, class_name: 'User'
+  has_many   :likes, dependent: :destroy
+  has_many   :liked_by_users, through: :likes, source: :user
 
   CATEGORIES = %w[Leadership Teamwork Gratitude Innovation].freeze
 

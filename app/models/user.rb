@@ -11,6 +11,9 @@ class User < ApplicationRecord
            foreign_key: :receiver_id,
            dependent: :destroy
 
+           has_many :likes, dependent: :destroy
+           has_many :liked_kudos, through: :likes, source: :kudo
+
   before_validation :normalize_email
   before_create :generate_email_verification_token
 
