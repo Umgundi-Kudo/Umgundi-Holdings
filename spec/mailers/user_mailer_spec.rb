@@ -7,7 +7,7 @@ RSpec.describe UserMailer, type: :mailer do
 
   describe "#verify_email" do
     let(:user) do
-      create(
+      build(
         :user,
         email: "konke@example.com",
         email_verification_token: "test-token-123",
